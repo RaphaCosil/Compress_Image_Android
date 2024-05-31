@@ -6,33 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
-    <TextView
-        android:id="@+id/textViewTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="monospace"
-        android:text="Image compressor"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.136" />
-
     <EditText
         android:id="@+id/imageSize"
         android:layout_width="315dp"
         android:layout_height="42dp"
         android:layout_marginTop="28dp"
         android:fontFamily="monospace"
-        android:hint="Insert the size you want"
+        android:hint="@string/insert_the_size_you_want"
         android:inputType="number"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_normal_image_size" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_normal_image_size"
+        />
 
     <TextView
         android:id="@+id/tv_normal_image_size"
@@ -42,7 +29,7 @@
         android:layout_marginTop="211dp"
         android:layout_marginBottom="34dp"
         android:fontFamily="monospace"
-        android:text="Original image size: "
+        android:text="@string/original_image_size"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonLoadImage"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,10 +41,11 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        tools:srcCompat="@tools:sample/avatars"
+        android:contentDescription="@string/cute_image_icon_with_a_face" />
 
     <TextView
         android:id="@+id/tv_compressed_image_size"
@@ -67,7 +55,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="31dp"
         android:fontFamily="monospace"
-        android:text="Image compressed size: "
+        android:text="@string/image_compressed_size"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonLoadImage"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,11 +66,11 @@
         android:id="@+id/imageViewCompress"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imageViewNormal"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
@@ -91,9 +79,22 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="172dp"
         android:fontFamily="monospace"
-        android:text="Load image"
+        android:textColor="#F1F1F1"
+        android:text="@string/load_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewNormal" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.054"
+        app:srcCompat="@drawable/imagita" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
