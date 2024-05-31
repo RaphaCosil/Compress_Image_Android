@@ -13,7 +13,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.example.compressimagestudy.databinding.ActivityMainBinding
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
-
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var compressedImage: String? = null
@@ -38,6 +37,12 @@ class MainActivity : AppCompatActivity() {
 
                         compressedImage = compressImage(bitmap, 300)
                         setImage(compressedImage!!, binding.imageViewCompress)
+
+                        // Exibir tamanho das imagens
+                        val originalSize = getImageSizeInKB(bitmap)
+                        val compressedSize = getImageSizeInKB(decodeImage(compressedImage!!))
+                        binding.tvNormalImageSize.text = "Tamanho da Imagem Original: $originalSize KB"
+                        binding.tvCompressedImageSize.text = "Tamanho da Imagem Comprimida: $compressedSize KB"
                     } catch (e: FileNotFoundException) {
                         e.printStackTrace()
                     }
@@ -50,8 +55,8 @@ class MainActivity : AppCompatActivity() {
             pickImage.launch(intent)
         }
     }
-    //PreviewWidth é o valor que muda o tamanho da foto
-    private fun compressImage(bitmap: Bitmap, previewWidth: Int): String{
+
+    private fun compressImage(bitmap: Bitmap, previewWidth: Int): String {
         val previewHeight = bitmap.height * previewWidth / bitmap.width
         val previewBitmap = Bitmap.createScaledBitmap(bitmap, previewWidth, previewHeight, false)
         val byteArrayOutputStream = ByteArrayOutputStream()
@@ -59,10 +64,23 @@ class MainActivity : AppCompatActivity() {
         val bytes = byteArrayOutputStream.toByteArray()
         return Base64.encodeToString(bytes, Base64.DEFAULT)
     }
+
     private fun setImage(encodedImage: String, imageView: ImageView): Bitmap? {
         val bytes = Base64.decode(encodedImage, Base64.DEFAULT)
         val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
         imageView.setImageBitmap(bitmap)
         return bitmap
+    }
+
+    private fun decodeImage(encodedImage: String): Bitmap {
+        val bytes = Base64.decode(encodedImage, Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+    }
+
+    private fun getImageSizeInKB(bitmap: Bitmap): Int {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        val bytes = byteArrayOutputStream.toByteArray()
+        return bytes.size / 1024
     }
 }

@@ -19,6 +19,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.051" />
 
+    <TextView
+        android:id="@+id/tv_normal_image_size"
+        android:layout_width="198dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="211dp"
+        android:layout_marginBottom="34dp"
+        android:text="Tamanho da Imagem Original: "
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageViewNormal" />
+
     <ImageView
         android:id="@+id/imageViewNormal"
         android:layout_width="200dp"
@@ -28,6 +40,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tv_compressed_image_size"
+        android:layout_width="182dp"
+        android:layout_height="78dp"
+        android:layout_marginTop="211dp"
+        android:layout_marginBottom="31dp"
+        android:text="Tamanho da Imagem Comprimida: "
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageViewCompress" />
 
     <ImageView
         android:id="@+id/imageViewCompress"
