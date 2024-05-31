@@ -1,4 +1,4 @@
-<h2></h2> image file compressor 🖼️</h2>
+<h2> Image File Compressor 🖼️</h2>
 
 <p>This is a study project on image file compression. It has the method *compressImage()* which compresses based on the value that the user enters, and shows the file size before and after compression! If you need to reduce the size of image files, this might help!</p>
 
