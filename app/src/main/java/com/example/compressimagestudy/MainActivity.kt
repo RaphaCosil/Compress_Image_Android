@@ -1,5 +1,6 @@
 package com.example.compressimagestudy
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -19,14 +20,12 @@ class MainActivity : AppCompatActivity() {
     private var compressedImage: String? = null
     private var notCompressedImage: String? = null
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
-        var previewWidth: Int = 0
-
+        var previewWidth= 0
         val pickImage: ActivityResultLauncher<Intent> = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_OK) {
@@ -42,11 +41,11 @@ class MainActivity : AppCompatActivity() {
                         compressedImage = compressImage(bitmap, previewWidth)
                         setImage(compressedImage!!, binding.imageViewCompress)
 
-                        // Exibir tamanho das imagens
+                        // Show image sizes
                         val originalSize = getImageSizeInKB(bitmap)
                         val compressedSize = getImageSizeInKB(decodeImage(compressedImage!!))
-                        binding.tvNormalImageSize.text = "Tamanho da Imagem Original: $originalSize KB"
-                        binding.tvCompressedImageSize.text = "Tamanho da Imagem Comprimida: $compressedSize KB"
+                        binding.tvNormalImageSize.text = "Original image size:: $originalSize KB"
+                        binding.tvCompressedImageSize.text = "Image compressed size: $compressedSize KB"
                     } catch (e: FileNotFoundException) {
                         e.printStackTrace()
                     }
@@ -54,20 +53,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.button.setOnClickListener {
-            val tamanhoImagem = binding.tamanhoImg.text
+        binding.buttonLoadImage.setOnClickListener {
+            val imageSize = binding.imageSize.text
 
-            if(tamanhoImagem != null){
+            if(imageSize != null){
                 try{
-                    previewWidth = Integer.parseInt(tamanhoImagem.toString())
+                    previewWidth = Integer.parseInt(imageSize.toString())
                     val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     pickImage.launch(intent)
                 }catch(e: Exception){
-                    Toast.makeText(this, "Insira um valor númerico", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Insert a numeric value", Toast.LENGTH_SHORT).show()
                 }
             }else{
-                    Toast.makeText(this, "Insira um valor", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Insert a value", Toast.LENGTH_SHORT).show()
                 }
         }
     }
@@ -76,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         val previewHeight = bitmap.height * previewWidth / bitmap.width
         val previewBitmap = Bitmap.createScaledBitmap(bitmap, previewWidth, previewHeight, false)
         val byteArrayOutputStream = ByteArrayOutputStream()
-        previewBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        previewBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
         val bytes = byteArrayOutputStream.toByteArray()
         return Base64.encodeToString(bytes, Base64.DEFAULT)
     }
@@ -95,7 +94,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun getImageSizeInKB(bitmap: Bitmap): Int {
         val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
         val bytes = byteArrayOutputStream.toByteArray()
         return bytes.size / 1024
     }
