@@ -19,6 +19,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.051" />
 
+
+    <EditText
+        android:id="@+id/tamanhoImg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:fontFamily="monospace"
+        android:textSize="16sp"
+        android:inputType="number"
+        android:hint="Insira o tamanho que vc deseja (ex: 500)"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.197"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView" />
+
+
     <TextView
         android:id="@+id/tv_normal_image_size"
         android:layout_width="198dp"
@@ -26,6 +42,7 @@
         android:layout_marginTop="211dp"
         android:layout_marginBottom="34dp"
         android:text="Tamanho da Imagem Original: "
+        android:fontFamily="monospace"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,6 +64,7 @@
         android:layout_height="78dp"
         android:layout_marginTop="211dp"
         android:layout_marginBottom="31dp"
+        android:fontFamily="monospace"
         android:text="Tamanho da Imagem Comprimida: "
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/button"

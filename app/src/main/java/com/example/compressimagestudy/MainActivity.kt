@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.compressimagestudy.databinding.ActivityMainBinding
@@ -23,6 +24,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+        var previewWidth: Int = 0
+
         val pickImage: ActivityResultLauncher<Intent> = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_OK) {
@@ -35,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                         notCompressedImage = compressImage(bitmap, bitmap.width)
                         setImage(notCompressedImage!!, binding.imageViewNormal)
 
-                        compressedImage = compressImage(bitmap, 300)
+                        compressedImage = compressImage(bitmap, previewWidth)
                         setImage(compressedImage!!, binding.imageViewCompress)
 
                         // Exibir tamanho das imagens
@@ -49,10 +53,22 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
         binding.button.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            pickImage.launch(intent)
+            val tamanhoImagem = binding.tamanhoImg.text
+
+            if(tamanhoImagem != null){
+                try{
+                    previewWidth = Integer.parseInt(tamanhoImagem.toString())
+                    val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    pickImage.launch(intent)
+                }catch(e: Exception){
+                    Toast.makeText(this, "Insira um valor númerico", Toast.LENGTH_SHORT).show()
+                }
+            }else{
+                    Toast.makeText(this, "Insira um valor", Toast.LENGTH_SHORT).show()
+                }
         }
     }
 
