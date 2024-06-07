@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">compressor</string>
-    <string name="original_image_size">Original image size:</string>
-    <string name="insert_the_size_you_want">Insert the size you want</string>
-    <string name="image_compressed_size">Image compressed size:</string>
+    <string name="original_image_size">Original Image Size:</string>
+    <string name="insert_the_size_you_want">Insert the size you in 0–100</string>
+    <string name="image_compressed_size">Compressed Image Size:</string>
     <string name="load_image">Load image</string>
     <string name="cute_image_icon_with_a_face">Cute image icon with a face</string>
 </resources>
