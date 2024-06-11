@@ -13,8 +13,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.compressimagestudy.databinding.ActivityMainBinding
-import id.zelory.compressor.Compressor
-import id.zelory.compressor.constraint.quality
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,11 +23,14 @@ import java.io.OutputStream
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    //This variable will be used to launch the activity
+    private val nativeCompressor = NativeCompressor()
+    private val zeloryCompressor = ZeloryCompressor()
+    private val utils = Utils()
+    //These variables will be used to launch the activity
     private var compressedImage: String? = null
     private var compressedZelory: File? = null
     private var notCompressedImage: String? = null
-    private val nativeCompressor = NativeCompressor()
-    private val utils = Utils()
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +63,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
+    //**//**// This function will launch the Zelory lib compressor in a activity //**//**//
     @SuppressLint("SetTextI18n")
     private val pickImageZeloryCompressor: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) {
@@ -74,9 +75,10 @@ class MainActivity : AppCompatActivity() {
                         try {
                             val imageSizePercent = (binding.imageSize.text.toString()).toInt()
                             val compressedOutputFile = File(cacheDir, "compressed_image.jpg")
-                            compressedZelory = Compressor.compress(this@MainActivity, imageUri) {
-                                quality(imageSizePercent) // Adjust the quality as needed
-                            }
+                            // Compress the image
+                            compressedZelory = zeloryCompressor.compressFile(
+                                this@MainActivity, imageUri, imageSizePercent)
+
                             compressedZelory?.copyTo(compressedOutputFile, overwrite = true)
                             compressedImage = compressedOutputFile.absolutePath
                             // Display the images
@@ -86,11 +88,10 @@ class MainActivity : AppCompatActivity() {
                             val originalSize = utils.getImageSizeInKB(imageUri)
                             val compressedSize = utils.getImageSizeInKB(compressedOutputFile)
                             // Display the image sizes
-                            binding.tvNormalImageSize.text = "Tamanho da imagem original: $originalSize KB"
-                            binding.tvCompressedImageSize.text = "Tamanho da imagem comprimida: $compressedSize KB"
+                            binding.tvNormalImageSize.text = "Original Image Size: $originalSize KB"
+                            binding.tvCompressedImageSize.text = "Compressed Image Size: $compressedSize KB"
 
                             // Save the images to the gallery
-                            saveImageToGallery(imageUri, "original_image.jpg")
                             saveImageToGallery(compressedOutputFile, "compressed_image.jpg")
                         } catch (e: FileNotFoundException) {
                             e.printStackTrace()
@@ -100,7 +101,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
+    //**//**// This function will launch the native compressor in a activity //**//**//
     @SuppressLint("SetTextI18n")
     private val pickImageNativeCompressor: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) {
@@ -122,12 +123,12 @@ class MainActivity : AppCompatActivity() {
 
                     // Compress the original image
                     val notCompressedOutputFile = File(cacheDir, "not_compressed_image.jpg")
-                    notCompressedImage = nativeCompressor.compressImageFile(originalFile, 1.0, notCompressedOutputFile)
+                    notCompressedImage = nativeCompressor.compressImageFile(originalFile, 1.0, 100, notCompressedOutputFile)
                     binding.imageViewNormal.setImageBitmap(BitmapFactory.decodeFile(notCompressedOutputFile.absolutePath))
 
                     // Compress the image according to the user input
                     val compressedOutputFile = File(cacheDir, "compressed_image.jpg")
-                    compressedImage = nativeCompressor.compressImageFile(originalFile, imageSizePercent, compressedOutputFile)
+                    compressedImage = nativeCompressor.compressImageFile(originalFile, imageSizePercent, 85,compressedOutputFile)
                     binding.imageViewCompress.setImageBitmap(BitmapFactory.decodeFile(compressedOutputFile.absolutePath))
 
                     // Show the sizes of the images
@@ -145,6 +146,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    //**//**// Helper functions //**//**//
     private fun uriToFile(uri: Uri): File {
         val inputStream = contentResolver.openInputStream(uri) ?: throw FileNotFoundException("Unable to open URI: $uri")
         val tempFile = File(cacheDir, "temp_image")
@@ -157,11 +160,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveImageToGallery(imageFile: File, imageName: String) {
+        val timestamp = System.currentTimeMillis()
+        val uniqueImageName = "${timestamp}_$imageName"
+
         val values = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, imageName)
+            put(MediaStore.Images.Media.DISPLAY_NAME, uniqueImageName)
             put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
             put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CompressedImages")
         }
+
         val uri: Uri? = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
         if (uri != null) {
             val outputStream: OutputStream? = contentResolver.openOutputStream(uri)
@@ -172,5 +179,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-}
 
+}
