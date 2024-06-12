@@ -58,7 +58,6 @@
         android:id="@+id/imageViewCompress"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +67,8 @@
     <Button
         android:id="@+id/buttonLoadNative"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
+        android:background="@drawable/button"
         android:fontFamily="monospace"
         android:text="Load native"
         android:textColor="#F1F1F1"
@@ -82,7 +82,8 @@
     <Button
         android:id="@+id/buttonLoadZelory"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
+        android:background="@drawable/button"
         android:fontFamily="monospace"
         android:text="Load zelory"
         android:textColor="#F1F1F1"
